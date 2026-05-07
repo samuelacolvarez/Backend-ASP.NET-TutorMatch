@@ -1,6 +1,4 @@
-﻿namespace TutorMatch_Backend.Models;
-
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace TutorMatch_Backend.Models
 {
