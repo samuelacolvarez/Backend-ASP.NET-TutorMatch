@@ -12,7 +12,7 @@ namespace TutorMatch_Backend.Validators
             if (string.IsNullOrWhiteSpace(booking.Subject))
                 return false;
 
-            if (booking.TutorId <= 0)
+            if (string.IsNullOrWhiteSpace(booking.TutorId))
                 return false;
 
             return true;

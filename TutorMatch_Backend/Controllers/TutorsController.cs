@@ -8,20 +8,19 @@ namespace TutorMatch_Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TutorsController : ControllerBase
+    public class TutorsController(TutorService service) : ControllerBase
     {
-        private readonly TutorService _service = new();
-
+       
         [HttpGet]
         public IActionResult GetTutors()
         {
-            return Ok(_service.GetAll());
+            return Ok(service.GetAll());
         }
 
         [HttpGet("{id}")]
         public IActionResult GetTutor(int id)
         {
-            var tutor = _service.GetById(id);
+            var tutor = service.GetById(id);
 
             if (tutor == null)
                 return NotFound("Tutor no encontrado");
@@ -42,7 +41,7 @@ namespace TutorMatch_Backend.Controllers
                 Email = dto.Email
             };
 
-            _service.Add(tutor);
+            service.Add(tutor);
 
             return Ok(tutor);
         }
@@ -50,7 +49,7 @@ namespace TutorMatch_Backend.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteTutor(int id)
         {
-            bool deleted = _service.Delete(id);
+            bool deleted = service.Delete(id);
 
             if (!deleted)
                 return NotFound("Tutor no encontrado");

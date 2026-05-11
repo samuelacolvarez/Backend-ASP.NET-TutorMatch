@@ -1,8 +1,4 @@
-﻿using Bogus;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
-using System.Reflection.Emit;
-using TutorMatch_Backend.Models;
+﻿using TutorMatch_Backend.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,13 +7,13 @@ namespace TutorMatch_Backend.Data;
 public class AppDbContext(DbContextOptions<AppDbContext> options)
     : IdentityDbContext<AppUser>(options)
 {
-    public DbSet<TutorProfile> TutorProfiles => Set<TutorProfile>();
-    public DbSet<TutoringOffer> TutoringOffers => Set<TutoringOffer>();
+   public DbSet<TutoringOffer> TutoringOffers => Set<TutoringOffer>();
     public DbSet<AvailabilitySlot> AvailabilitySlots => Set<AvailabilitySlot>();
     public DbSet<Booking> Bookings => Set<Booking>();
     public DbSet<Message> Messages => Set<Message>();
     public DbSet<Review> Reviews => Set<Review>();
     public DbSet<Report> Reports => Set<Report>();
+    public DbSet<Tutor> Tutors => Set<Tutor>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -26,10 +22,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
         builder.Entity<AppUser>()
             .Property(u => u.VisibilityScore).HasColumnType("float");
 
-        builder.Entity<TutorProfile>()
-            .HasOne(tp => tp.User)
-            .WithOne(u => u.TutorProfile)
-            .HasForeignKey<TutorProfile>(tp => tp.UserId);
 
         builder.Entity<Booking>()
             .HasOne(b => b.Student)
@@ -43,10 +35,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             .HasForeignKey(b => b.TutorId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Entity<Review>()
-            .HasOne(r => r.Booking)
-            .WithOne(b => b.Review)
-            .HasForeignKey<Review>(r => r.BookingId);
+
+        builder.Entity<Message>()
+            .HasOne(m => m.Sender)
+            .WithMany(u => u.Messages)
+            .HasForeignKey(m => m.SenderId)
+            .OnDelete(DeleteBehavior.Restrict);
+
 
         builder.Entity<Review>()
             .HasOne(r => r.Student)
@@ -60,14 +55,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             .HasForeignKey(r => r.TutorId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Entity<Message>()
-            .HasOne(m => m.Sender)
-            .WithMany(u => u.Messages)
-            .HasForeignKey(m => m.SenderId)
-            .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Entity<TutorProfile>()
-            .Property(t => t.HourlyRate).HasColumnType("decimal(18,2)");
     }
 }
 

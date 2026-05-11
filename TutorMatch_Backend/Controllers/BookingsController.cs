@@ -8,20 +8,19 @@ namespace TutorMatch_Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BookingsController : ControllerBase
+    public class BookingsController(BookingService service) : ControllerBase
     {
-        private readonly BookingService _service = new();
-
+      
         [HttpGet]
         public IActionResult GetBookings()
         {
-            return Ok(_service.GetAll());
+            return Ok(service.GetAll());
         }
 
         [HttpGet("{id}")]
         public IActionResult GetBooking(int id)
         {
-            var booking = _service.GetById(id);
+            var booking = service.GetById(id);
 
             if (booking == null)
                 return NotFound("Reserva no encontrada");
@@ -43,7 +42,7 @@ namespace TutorMatch_Backend.Controllers
                 TutorId = dto.TutorId
             };
 
-            _service.Add(booking);
+            service.Add(booking);
 
             return Ok(booking);
         }
@@ -51,7 +50,7 @@ namespace TutorMatch_Backend.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteBooking(int id)
         {
-            bool deleted = _service.Delete(id);
+            bool deleted = service.Delete(id);
 
             if (!deleted)
                 return NotFound("Reserva no encontrada");

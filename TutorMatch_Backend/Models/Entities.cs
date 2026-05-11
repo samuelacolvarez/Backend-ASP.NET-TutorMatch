@@ -11,7 +11,7 @@ namespace TutorMatch_Backend.Models
         public int CancellationCount { get; set; }
         public double VisibilityScore { get; set; } = 1.0;
 
-        public TutorProfile? TutorProfile { get; set; }
+        public Tutor? Tutor { get; set; }
         public ICollection<Booking> BookingsAsStudent { get; set; } = [];
         public ICollection<Booking> BookingsAsTutor { get; set; } = [];
         public ICollection<Review> ReviewsGiven { get; set; } = [];
@@ -20,21 +20,7 @@ namespace TutorMatch_Backend.Models
         public ICollection<Report> ReportsSubmitted { get; set; } = [];
     }
 
-    public class TutorProfile
-    {
-        public int Id { get; set; }
-        public string UserId { get; set; } = string.Empty;
-        public string Subjects { get; set; } = string.Empty; // CSV
-        public decimal HourlyRate { get; set; }
-        public string Modality { get; set; } = "Online"; // Online | InPerson | Both
-        public double AverageRating { get; set; }
-        public int ReviewCount { get; set; }
-
-        public AppUser User { get; set; } = null!;
-        public ICollection<TutoringOffer> Offers { get; set; } = [];
-        public ICollection<AvailabilitySlot> AvailabilitySlots { get; set; } = [];
-    }
-
+  
     public class TutoringOffer
     {
         public int Id { get; set; }
@@ -45,7 +31,7 @@ namespace TutorMatch_Backend.Models
         public string DurationOptions { get; set; } = string.Empty; // CSV e.g. "60,90,120"
         public bool IsActive { get; set; } = true;
 
-        public TutorProfile TutorProfile { get; set; } = null!;
+        public Tutor Tutor { get; set; } = null!;
     }
 
     public class AvailabilitySlot
@@ -56,30 +42,10 @@ namespace TutorMatch_Backend.Models
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
 
-        public TutorProfile TutorProfile { get; set; } = null!;
+        public Tutor Tutor { get; set; } = null!;
     }
 
-    public class Booking
-    {
-        public int Id { get; set; }
-        public string StudentId { get; set; } = string.Empty;
-        public string TutorId { get; set; } = string.Empty;
-        public int OfferId { get; set; }
-        public DateTime ProposedDateTime { get; set; }
-        public int DurationMinutes { get; set; }
-        public string? Message { get; set; }
-        public BookingStatus Status { get; set; } = BookingStatus.Pending;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? AcceptDeadline { get; set; }
-        public bool ReviewSubmitted { get; set; }
-
-        public AppUser Student { get; set; } = null!;
-        public AppUser Tutor { get; set; } = null!;
-        public TutoringOffer Offer { get; set; } = null!;
-        public ICollection<Message> Messages { get; set; } = [];
-        public Review? Review { get; set; }
-    }
-
+ 
     public enum BookingStatus
     {
         Pending,

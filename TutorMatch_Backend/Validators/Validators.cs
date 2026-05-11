@@ -1,6 +1,6 @@
 ﻿namespace TutorMatch_Backend.Validators
 {
-    public class RegisterValidators
+    public class RegisterValidator
     {
     }
 }

@@ -1,39 +1,34 @@
-﻿using TutorMatch_Backend.Models;
+﻿using TutorMatch_Backend.Data;
+using TutorMatch_Backend.Models;
 
 namespace TutorMatch_Backend.Services
 {
-    public class TutorService
+    public class TutorService(AppDbContext context)
     {
-        private static List<Tutor> tutors = new();
-
         public List<Tutor> GetAll()
         {
-            return tutors;
+            return context.Tutors.ToList();
         }
 
         public Tutor? GetById(int id)
         {
-            return tutors.FirstOrDefault(t => t.Id == id);
+            return context.Tutors.FirstOrDefault(t => t.Id == id);
         }
 
         public Tutor Add(Tutor tutor)
         {
-            tutor.Id = tutors.Count + 1;
-
-            tutors.Add(tutor);
-
+            context.Tutors.Add(tutor);
+            context.SaveChanges();
             return tutor;
         }
 
         public bool Delete(int id)
         {
             var tutor = GetById(id);
+            if (tutor == null) return false;
 
-            if (tutor == null)
-                return false;
-
-            tutors.Remove(tutor);
-
+            context.Tutors.Remove(tutor);
+            context.SaveChanges();
             return true;
         }
     }

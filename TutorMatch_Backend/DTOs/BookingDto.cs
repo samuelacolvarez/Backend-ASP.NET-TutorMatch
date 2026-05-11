@@ -8,6 +8,6 @@
 
         public DateTime Date { get; set; }
 
-        public int TutorId { get; set; }
+        public string TutorId { get; set; } = string.Empty;
     }
 }
